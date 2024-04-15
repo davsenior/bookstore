@@ -1,44 +1,47 @@
 <?php
-// Adding the menu function to my custom theme (part of assignment one)
+// Registering navigation menus for header and footer
 function custom_theme_setup() {
   register_nav_menus( array(
-    'header' => 'Header menu',
-    'footer' => 'Footer menu'
+    'header' => 'Header menu', // Header navigation menu
+    'footer' => 'Footer menu' // Footer navigation menu
   ) );
 }
 add_action( 'after_setup_theme', 'custom_theme_setup' );
-// Add Featured image support to our posts (part of assignment one)
+
+// Adding support for featured images
 add_theme_support( 'post-thumbnails' );
-// set up our custom footer widgets (part of assignment one)
+
+// Setting up custom footer widgets
 function footer_widgets_init(){
   register_sidebar(array(
     'name'          => __( 'Footer Widget Area One', 'footerwidget' ),
     'id'            => 'footer-widget-area-one',
     'description'   => __( 'The first footer widget area', 'footerwidget' ),
-    'before_widget' => '<div class="logo-widget">',
-    'after_widget'  => '</div>',
+    'before_widget' => '<div class="logo-widget">', // Before widget markup
+    'after_widget'  => '</div>', // After widget markup
   ));
   register_sidebar( array(
     'name'          => __( 'Footer Widget Area Two', 'footerwidget' ),
     'id'            => 'footer-widget-area-two',
     'description'   => __( 'The second footer widget area', 'footerwidget' ),
-    'before_widget' => '<div class="footer-menu-widget">',
-    'after_widget'  => '</div>',
-    'before_title'  => '<h4 class="widget-title">',
-    'after_title'   => '</h4>',
+    'before_widget' => '<div class="footer-menu-widget">', // Before widget markup
+    'after_widget'  => '</div>', // After widget markup
+    'before_title'  => '<h4 class="widget-title">', // Before title markup
+    'after_title'   => '</h4>', // After title markup
   ));
   register_sidebar( array(
     'name'          => __( 'Footer Widget Area Three', 'footerwidget' ),
     'id'            => 'footer-widget-area-three',
     'description'   => __( 'The third footer widget area', 'footerwidget' ),
-    'before_widget' => '<div class="contact-widget">',
-    'after_widget'  => '</div>',
-    'before_title'  => '<h4 class="widget-title">',
-    'after_title'   => '</h4>',
+    'before_widget' => '<div class="contact-widget">', // Before widget markup
+    'after_widget'  => '</div>', // After widget markup
+    'before_title'  => '<h4 class="widget-title">', // Before title markup
+    'after_title'   => '</h4>', // After title markup
   ));
 }
 add_action( 'widgets_init', 'footer_widgets_init' );
-// My custom post type
+
+// Registering a custom post type 'books'
 function books_init(){
   $args = array(
     'label' => 'books',
@@ -63,9 +66,10 @@ function books_init(){
   register_post_type('books', $args);
 }
 add_action('init', 'books_init');
-// now create a shortcode for my custom post-type
+
+// Creating a shortcode for displaying custom post type 'books'
 function books_shortcode(){
-  $query = new WP_Query(array('post_type' => 'books', 'post_per_page' => 8, 'order' => 'asc'));
+  $query = new WP_Query(array('post_type' => 'books', 'posts_per_page' => 8, 'order' => 'asc'));
   while ($query -> have_posts()) : $query-> the_post(); ?>
     <div class="col-sm-12 col-md-6 col-lg-4">
       <div class="image-container">
@@ -82,16 +86,21 @@ function books_shortcode(){
   endwhile;
   wp_reset_postdata();
 }
-// register shortcode
+// Registering the shortcode
 add_shortcode('books', 'books_shortcode');
-// changing my excerpt length
+
+// Modifying the excerpt length
 add_filter( 'excerpt_length', function($length) {
-  return 25;
+  return 25; // New excerpt length
 }, PHP_INT_MAX );
-// adding woocommerce support to our theme
+
+// Adding WooCommerce support to the theme
 function bookstore_add_woocommerce_support() {
   add_theme_support( 'woocommerce' );
 }
 add_action( 'after_setup_theme', 'bookstore_add_woocommerce_support' );
+
+// Enqueueing WooCommerce cart fragments script
 function enqueue_wc_cart_fragments() { wp_enqueue_script( 'wc-cart-fragments' ); }
 add_action( 'wp_enqueue_scripts', 'enqueue_wc_cart_fragments' );
+?>
